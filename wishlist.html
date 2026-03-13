@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản phẩm yêu thích - Adidas VN</title>
+    <link rel="stylesheet" href="./assets/style/style.css">
+    <link rel="stylesheet" href="./assets/themify-icons/themify-icons.css">
+    <style>
+        .wishlist-container {
+            width: 85%;
+            margin: 220px auto 100px;
+        }
+
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 35px;
+            margin-top: 40px;
+        }
+
+        .wishlist-item {
+            position: relative;
+            background: #fff;
+            transition: var(--transition);
+        }
+
+        .wishlist-item:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            transform: translateY(-5px);
+        }
+
+        .wishlist-item img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            display: block;
+        }
+
+        .item-details {
+            padding: 20px 15px;
+            border: 1px solid #f0f0f0;
+            border-top: none;
+        }
+
+        .item-details h3 {
+            font-size: 16px;
+            margin: 0 0 10px;
+            text-transform: uppercase;
+            font-family: 'Times New Roman', serif;
+            letter-spacing: 0.5px;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .item-details .price {
+            font-weight: bold;
+            font-size: 18px;
+            color: #000;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .remove-fav {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #e11a2b;
+            font-size: 18px;
+            z-index: 5;
+            transition: var(--transition);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .remove-fav:hover {
+            background: #e11a2b;
+            color: #fff;
+        }
+
+        .add-to-cart-btn {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            color: #fff;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+        }
+
+        .add-to-cart-btn:hover {
+            background: #333;
+        }
+
+        .empty-wishlist {
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        .empty-wishlist a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .wishlist-header {
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Main Header -->
+    <div id="main-header">
+        <div class="head-notify">
+            <p>GIAO HÀNG MIỄN PHÍ CHO THÀNH VIÊN CỦA ADICLUB</p>
+        </div>
+
+        <div id="header-nav">
+            <div class="first-row-head">
+                <ul class="first-header-nav">
+                    <li><a href="#">Trợ giúp</a></li>
+                    <li><a href="#">Theo dõi đơn hàng</a></li>
+                    <li><img src="./assets/hinhanh/vn.svg" alt="VN" style="width: 20px;"></li>
+                </ul>
+            </div>
+            <div class="second-row-head">
+                <div class="header-logo">
+                    <a href="index.html">
+                        <img src="./assets/hinhanh/logoadidas.jpg" alt="logo" style="width: 70px;">
+                    </a>
+                </div>
+                <div id="list">
+                    <ul class="second-header-nav">
+                        <li><a href="index.html">HOME</a></li>
+                        <li><a href="clothes.html">CLOTHES</a></li>
+                        <li><a href="index.html#option-product">MEN</a></li>
+                        <li><a href="index.html#news">HOT</a></li>
+                    </ul>
+                </div>
+                <div class="header-actions">
+                    <div class="search-container">
+                        <input id="inputsearch" type="text" placeholder="Search..." class="search-input">
+                        <i class="ti-search"></i>
+                    </div>
+                    <div class="user-info flex items-center gap-10">
+                        <span id="userNameDisplay" style="font-size: 11px; font-weight: bold;">GUEST</span>
+                        <a href="login.html" class="icon-link"><i class="ti-user"></i></a>
+                    </div>
+                    <div class="love relative">
+                        <a href="wishlist.html" class="icon-link">
+                            <i class="ti-heart"></i>
+                            <span id="wishlistCount" class="badge">0</span>
+                        </a>
+                    </div>
+                    <div class="cart relative">
+                        <a href="cart.html" class="icon-link">
+                            <i class="ti-bag"></i>
+                            <span id="cartCount" class="badge">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="wishlist-container">
+        <div class="wishlist-header">
+            <h1 class="text-upper" style="font-size: 32px; letter-spacing: 2px;">Danh sách yêu thích</h1>
+        </div>
+        <div class="wishlist-grid" id="wishlistGrid">
+            <!-- Items loaded via JS -->
+            <p>Đang tải danh sách...</p>
+        </div>
+    </div>
+
+    <footer style="background: #000; color: #fff; text-align: center; padding: 60px 0; margin-top: 100px;">
+        <div class="container">
+            <img src="./assets/hinhanh/logoadidas.jpg" alt="footer-logo"
+                style="width: 60px; filter: invert(1); margin-bottom: 20px;">
+            <p>&copy; 2026 Adidas VN - Official Store Clone</p>
+        </div>
+    </footer>
+
+    <script src="./assets/style/main.js"></script>
+    <script>
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) window.location.href = 'login.html';
+
+        function loadWishlist() {
+            const wishKey = `wishlist_${currentUser}`;
+            const wishlist = JSON.parse(localStorage.getItem(wishKey) || '[]');
+            const grid = document.getElementById('wishlistGrid');
+
+            if (wishlist.length === 0) {
+                grid.innerHTML = `<div class="empty-wishlist" style="grid-column: 1/-1;">
+                    <h2>Bạn chưa có sản phẩm yêu thích nào</h2>
+                    <p>Hãy lưu lại những sản phẩm bạn yêu thích để mua sau nhé.</p>
+                    <a href="clothes.html">KHÁM PHÁ NGAY</a>
+                </div>`;
+                return;
+            }
+
+            let html = '';
+            wishlist.forEach((item, index) => {
+                html += `
+                    <div class="wishlist-item">
+                        <div class="remove-fav" onclick="removeFromWishlist(${index})" title="Xóa">
+                            <i class="ti-close"></i>
+                        </div>
+                        <img src="${item.img}" alt="${item.name}">
+                        <div class="item-details">
+                            <h3>${item.name}</h3>
+                            <span class="price">${item.price}</span>
+                            <button class="add-to-cart-btn" onclick="addToCartFromFav(${index})">Thêm vào giỏ hàng</button>
+                        </div>
+                    </div>
+                `;
+            });
+            grid.innerHTML = html;
+            if (window.updateBadges) window.updateBadges();
+        }
+
+        function removeFromWishlist(index) {
+            const wishKey = `wishlist_${currentUser}`;
+            let wishlist = JSON.parse(localStorage.getItem(wishKey) || '[]');
+            wishlist.splice(index, 1);
+            localStorage.setItem(wishKey, JSON.stringify(wishlist));
+            loadWishlist();
+        }
+
+        function addToCartFromFav(index) {
+            const wishKey = `wishlist_${currentUser}`;
+            let wishlist = JSON.parse(localStorage.getItem(wishKey) || '[]');
+            const item = wishlist[index];
+
+            if (window.addToCart) {
+                window.addToCart(item);
+                // Optionally remove from wishlist after adding to cart
+                // wishlist.splice(index, 1);
+                // localStorage.setItem(wishKey, JSON.stringify(wishlist));
+                // loadWishlist();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadWishlist);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng - Adidas VN</title>
+    <link rel="stylesheet" href="./assets/style/style.css">
+    <link rel="stylesheet" href="./assets/themify-icons/themify-icons.css">
+    <style>
+        .cart-container {
+            width: 85%;
+            margin: 220px auto 100px;
+            display: flex;
+            gap: 50px;
+        }
+
+        .cart-items {
+            flex: 2;
+        }
+
+        .cart-summary {
+            flex: 1;
+            background: #f8f8f8;
+            padding: 40px;
+            height: fit-content;
+            border: 1px solid #eee;
+            position: sticky;
+            top: 220px;
+        }
+
+        .cart-summary h3 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            font-family: 'Times New Roman', serif;
+            letter-spacing: 1px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 30px;
+            padding: 30px 0;
+            border-bottom: 2px solid #f0f0f0;
+            transition: var(--transition);
+        }
+
+        .cart-item:hover {
+            background: #fafafa;
+        }
+
+        .cart-item img {
+            width: 180px;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.02);
+        }
+
+        .item-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .item-info h3 {
+            margin: 0;
+            text-transform: uppercase;
+            font-size: 18px;
+            line-height: 1.4;
+        }
+
+        .item-info .price {
+            font-weight: bold;
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .remove-btn {
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 13px;
+            color: #767677;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .remove-btn:hover {
+            color: #000;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 25px;
+            margin-top: 25px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 20px;
+            background: #000;
+            color: #fff;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: var(--transition);
+        }
+
+        .checkout-btn:hover {
+            background: #333;
+            transform: translate(-3px, -3px);
+            box-shadow: 10px 10px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        .empty-cart a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Main Header -->
+    <div id="main-header">
+        <div class="head-notify">
+            <p>GIAO HÀNG MIỄN PHÍ CHO THÀNH VIÊN CỦA ADICLUB</p>
+        </div>
+
+        <div id="header-nav">
+            <div class="first-row-head">
+                <ul class="first-header-nav">
+                    <li><a href="#">Trợ giúp</a></li>
+                    <li><a href="#">Theo dõi đơn hàng</a></li>
+                    <li><img src="./assets/hinhanh/vn.svg" alt="VN" style="width: 20px;"></li>
+                </ul>
+            </div>
+            <div class="second-row-head">
+                <div class="header-logo">
+                    <a href="index.html">
+                        <img src="./assets/hinhanh/logoadidas.jpg" alt="logo" style="width: 70px;">
+                    </a>
+                </div>
+                <div id="list">
+                    <ul class="second-header-nav">
+                        <li><a href="index.html">HOME</a></li>
+                        <li><a href="clothes.html">CLOTHES</a></li>
+                        <li><a href="index.html#option-product">MEN</a></li>
+                        <li><a href="index.html#news">HOT</a></li>
+                    </ul>
+                </div>
+                <div class="header-actions">
+                    <div class="search-container">
+                        <input id="inputsearch" type="text" placeholder="Search..." class="search-input">
+                        <i class="ti-search"></i>
+                    </div>
+                    <div class="user-info flex items-center gap-10">
+                        <span id="userNameDisplay" style="font-size: 11px; font-weight: bold;">GUEST</span>
+                        <a href="login.html" class="icon-link"><i class="ti-user"></i></a>
+                    </div>
+                    <div class="love relative">
+                        <a href="wishlist.html" class="icon-link">
+                            <i class="ti-heart"></i>
+                            <span id="wishlistCount" class="badge">0</span>
+                        </a>
+                    </div>
+                    <div class="cart relative">
+                        <a href="cart.html" class="icon-link">
+                            <i class="ti-bag"></i>
+                            <span id="cartCount" class="badge">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart-container">
+        <div class="cart-items" id="cartList">
+            <!-- Items loaded via JS -->
+            <p>Đang tải giỏ hàng...</p>
+        </div>
+
+        <div class="cart-summary">
+            <h3>TÓM TẮT ĐƠN HÀNG</h3>
+            <div class="summary-row">
+                <span>Tạm tính</span>
+                <span id="subtotal">0₫</span>
+            </div>
+            <div class="summary-row">
+                <span>Phí vận chuyển</span>
+                <span>Miễn phí</span>
+            </div>
+            <div class="summary-row total">
+                <span>TỔNG CỘNG</span>
+                <span id="totalPrice">0₫</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Thanh toán ngay</button>
+        </div>
+    </div>
+
+    <footer style="background: #000; color: #fff; text-align: center; padding: 60px 0; margin-top: 100px;">
+        <div class="container">
+            <img src="./assets/hinhanh/logoadidas.jpg" alt="footer-logo"
+                style="width: 60px; filter: invert(1); margin-bottom: 20px;">
+            <p>&copy; 2026 Adidas VN - Official Store Clone</p>
+        </div>
+    </footer>
+
+    <script src="./assets/style/main.js"></script>
+    <script>
+        const currentUser = localStorage.getItem('currentUser');
+        if (!currentUser) window.location.href = 'login.html';
+
+        function loadCart() {
+            const cartKey = `cart_${currentUser}`;
+            const cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            const cartList = document.getElementById('cartList');
+            const subtotalEl = document.getElementById('subtotal');
+            const totalEl = document.getElementById('totalPrice');
+
+            if (cart.length === 0) {
+                cartList.innerHTML = `<div class="empty-cart">
+                    <h2>Giỏ hàng của bạn đang trống</h2>
+                    <p>Hãy chọn những sản phẩm ưng ý để thêm vào giỏ hàng nhé.</p>
+                    <a href="clothes.html">KHÁM PHÁ NGAY</a>
+                </div>`;
+                subtotalEl.innerText = '0₫';
+                totalEl.innerText = '0₫';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const priceValue = parseInt(item.price.replace(/[.₫]/g, ''));
+                total += priceValue;
+                html += `
+                    <div class="cart-item">
+                        <img src="${item.img}" alt="${item.name}">
+                        <div class="item-info">
+                            <div>
+                                <h3>${item.name}</h3>
+                                <p class="price">${item.price}</p>
+                            </div>
+                            <span class="remove-btn" onclick="removeFromCart(${index})">Gỡ khỏi giỏ hàng</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartList.innerHTML = html;
+            const formattedTotal = total.toLocaleString('vi-VN') + '₫';
+            subtotalEl.innerText = formattedTotal;
+            totalEl.innerText = formattedTotal;
+            if (window.updateBadges) window.updateBadges();
+        }
+
+        function removeFromCart(index) {
+            const cartKey = `cart_${currentUser}`;
+            let cart = JSON.parse(localStorage.getItem(cartKey) || '[]');
+            cart.splice(index, 1);
+            localStorage.setItem(cartKey, JSON.stringify(cart));
+            loadCart();
+        }
+
+        function checkout() {
+            const cartKey = `cart_${currentUser}`;
+            if (window.showToast) window.showToast('Thanh toán thành công! Chân thành cảm ơn bạn.');
+            localStorage.removeItem(cartKey);
+            setTimeout(() => window.location.href = 'index.html', 2000);
+        }
+
+        document.addEventListener('DOMContentLoaded', loadCart);
+    </script>
+</body>
+
+</html>

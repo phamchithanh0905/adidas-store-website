@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản phẩm Quần áo Thể thao - Adidas VN</title>
+    <link rel="stylesheet" href="./assets/style/style.css">
+    <link rel="stylesheet" href="./assets/themify-icons/themify-icons.css">
+    <script src="./assets/style/main.js"></script>
+    <script>
+        // Kiểm tra đăng nhập ngay lập tức
+        if (localStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'login.html';
+        }
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Main Header -->
+    <div id="main-header">
+        <div class="head-notify">
+            <p>GIAO HÀNG MIỄN PHÍ CHO THÀNH VIÊN CỦA ADICLUB</p>
+        </div>
+
+        <div id="header-nav">
+            <div class="first-row-head">
+                <ul class="first-header-nav">
+                    <li><a href="#">Trợ giúp</a></li>
+                    <li><a href="#">Theo dõi đơn hàng</a></li>
+                    <li><img src="./assets/hinhanh/vn.svg" alt="VN" style="width: 20px;"></li>
+                </ul>
+            </div>
+            <div class="second-row-head">
+                <div class="header-logo">
+                    <a href="index.html">
+                        <img src="./assets/hinhanh/logoadidas.jpg" alt="logo" style="width: 70px;">
+                    </a>
+                </div>
+                <div id="list">
+                    <ul class="second-header-nav">
+                        <li><a href="index.html">HOME</a></li>
+                        <li><a href="clothes.html" style="border-bottom: 2px solid #000;">CLOTHES</a></li>
+                        <li><a href="index.html#option-product">MEN</a></li>
+                        <li><a href="index.html#news">HOT</a></li>
+                    </ul>
+                </div>
+                <div class="header-actions">
+                    <div class="search-container">
+                        <input id="inputsearch" type="text" placeholder="Search..." class="search-input">
+                        <i class="ti-search"></i>
+                    </div>
+                    <div class="user-info flex items-center gap-10">
+                        <span id="userNameDisplay" style="font-size: 11px; font-weight: bold;">GUEST</span>
+                        <a href="#" onclick="logout()" class="icon-link" title="Logout"><i class="ti-power-off"></i></a>
+                    </div>
+                    <div class="love relative">
+                        <a href="wishlist.html" class="icon-link">
+                            <i class="ti-heart"></i>
+                            <span id="wishlistCount" class="badge">0</span>
+                        </a>
+                    </div>
+                    <div class="cart relative">
+                        <a href="cart.html" class="icon-link">
+                            <i class="ti-bag"></i>
+                            <span id="cartCount" class="badge">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div id="clothes-container" class="container" style="margin-top: 220px;">
+        <div class="clothes-header flex justify-between items-center mb-30"
+            style="border-bottom: 2px solid #000; padding-bottom: 15px;">
+            <h1 class="text-upper" style="font-size: 32px; letter-spacing: 2px;">Tất cả sản phẩm</h1>
+            <div class="filter-controls flex gap-20">
+                <select id="sortPrice" class="filter-select">
+                    <option value="default">Sắp xếp theo...</option>
+                    <option value="low">Giá: Thấp đến Cao</option>
+                    <option value="high">Giá: Cao đến Thấp</option>
+                </select>
+                <select id="filterCat" class="filter-select">
+                    <option value="all">Tất cả danh mục</option>
+                    <option value="Football">Bóng đá</option>
+                    <option value="Lifestyle">Lifestyle</option>
+                    <option value="Sportswear">Thể thao</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="clothes-grid" id="clothesGrid">
+            <!-- Loading placeholders -->
+            <div class="skeleton" style="height: 350px;"></div>
+            <div class="skeleton" style="height: 350px;"></div>
+            <div class="skeleton" style="height: 350px;"></div>
+            <div class="skeleton" style="height: 350px;"></div>
+        </div>
+    </div>
+
+    <footer style="background: #000; color: #fff; text-align: center; padding: 60px 0; margin-top: 100px;">
+        <div class="container">
+            <img src="./assets/hinhanh/logoadidas.jpg" alt="footer-logo"
+                style="width: 60px; filter: invert(1); margin-bottom: 20px;">
+            <p>&copy; 2026 Adidas VN - Official Store Clone</p>
+        </div>
+    </footer>
+
+    <script>
+        function renderClothes(filter = 'all', sort = 'default') {
+            const grid = document.getElementById('clothesGrid');
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            let list = Object.values(window.products || {});
+            if (list.length === 0) {
+                grid.innerHTML = '<p>Không tìm thấy sản phẩm nào.</p>';
+                return;
+            }
+
+            if (filter !== 'all') list = list.filter(p => p.cat === filter);
+
+            if (sort === 'low') {
+                list.sort((a, b) => parseInt(a.price.replace(/\./g, '')) - parseInt(b.price.replace(/\./g, '')));
+            } else if (sort === 'high') {
+                list.sort((a, b) => parseInt(b.price.replace(/\./g, '')) - parseInt(a.price.replace(/\./g, '')));
+            }
+
+            list.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'product';
+                div.innerHTML = `
+                    <a href="product-detail.html?id=${p.id}" style="text-decoration: none; color: inherit; display: block;">
+                        <img loading="lazy" src="${p.img}" alt="${p.name}">
+                        <div class="annotation">
+                            <p class="price-item">${p.price}</p>
+                            <p class="annotation-item">${p.name}</p>
+                        </div>
+                    </a>
+                    <div class="quick-actions">
+                        <button onclick="window.addToCart(window.products['${p.id}'])" title="Add to Cart"><i class="ti-bag"></i></button>
+                        <button onclick="window.addToWishlist(window.products['${p.id}'])" title="Add to Wishlist"><i class="ti-heart"></i></button>
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        document.getElementById('sortPrice').addEventListener('change', (e) => renderClothes(document.getElementById('filterCat').value, e.target.value));
+        document.getElementById('filterCat').addEventListener('change', (e) => renderClothes(e.target.value, document.getElementById('sortPrice').value));
+
+        // Initial render
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                renderClothes();
+                if (typeof window.updateBadges === 'function') {
+                    window.updateBadges();
+                }
+                const user = localStorage.getItem('currentUser');
+                if (user) document.getElementById('userNameDisplay').innerText = user.toUpperCase();
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>

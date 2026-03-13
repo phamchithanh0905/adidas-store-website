@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - A Đi Đát</title>
+    <!-- CSS Linking -->
+    <link rel="stylesheet" href="./assets/style/style.css">
+    <link rel="stylesheet" href="./assets/themify-icons/themify-icons.css">
+</head>
+
+<body class="auth-body">
+    <div class="auth-container">
+        <a href="index.html">
+            <img src="./assets/hinhanh/logoadidas.jpg" class="auth-logo" alt="Adidas Logo">
+        </a>
+        <h1>Đăng nhập</h1>
+
+        <div id="errorMsg" class="auth-error"></div>
+
+        <div class="auth-input-group">
+            <label>Email / Tên đăng nhập *</label>
+            <input type="text" id="username" class="auth-input" placeholder="admin@adidas.com" autocomplete="username">
+        </div>
+
+        <div class="auth-input-group">
+            <label>Mật khẩu *</label>
+            <input type="password" id="password" class="auth-input" placeholder="••••••••"
+                autocomplete="current-password">
+        </div>
+
+        <button class="auth-btn" id="loginBtn" onclick="handleLogin()">
+            Tiếp tục
+            <i class="ti-arrow-right"></i>
+        </button>
+
+        <div class="auth-links">
+            Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./assets/style/auth.js"></script>
+    <script>
+        function handleLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const error = document.getElementById('errorMsg');
+            const btn = document.getElementById('loginBtn');
+
+            if (!user || !pass) {
+                error.style.display = 'block';
+                error.textContent = 'Vui lòng nhập đầy đủ thông tin!';
+                return;
+            }
+
+            // Set loading state
+            btn.innerHTML = 'Đang kiểm tra... <i class="ti-reload-loop"></i>';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const result = UserDB.login(user, pass);
+
+                if (result.success) {
+                    window.location.href = 'clothes.html';
+                } else {
+                    error.style.display = 'block';
+                    error.textContent = result.message + ' (Gợi ý: admin/123)';
+                    btn.innerHTML = 'Tiếp tục <i class="ti-arrow-right"></i>';
+                    btn.disabled = false;
+                }
+            }, 800);
+        }
+
+        // Enter key listener
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
+
+        // Redirect if already logged in
+        if (localStorage.getItem('isLoggedIn') === 'true') {
+            window.location.href = 'clothes.html';
+        }
+    </script>
+</body>
+
+</html>

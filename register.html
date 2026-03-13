@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký hội viên - A Đi Đát</title>
+    <!-- CSS Linking -->
+    <link rel="stylesheet" href="./assets/style/style.css">
+    <link rel="stylesheet" href="./assets/themify-icons/themify-icons.css">
+</head>
+
+<body class="auth-body">
+    <div class="auth-container" style="width: 500px;">
+        <a href="index.html">
+            <img src="./assets/hinhanh/logoadidas.jpg" class="auth-logo" alt="Adidas Logo">
+        </a>
+        <h1>Tạo tài khoản</h1>
+
+        <div id="errorMsg" class="auth-error"></div>
+        <div id="successMsg" class="auth-success"></div>
+
+        <div class="auth-input-group">
+            <label>Tên đăng nhập *</label>
+            <input type="text" id="username" class="auth-input" placeholder="Ví dụ: nguyenvan_a">
+        </div>
+
+        <div class="auth-input-group">
+            <label>Họ và tên *</label>
+            <input type="text" id="fullname" class="auth-input" placeholder="Ví dụ: Nguyễn Văn A">
+        </div>
+
+        <div class="auth-input-group">
+            <label>Email *</label>
+            <input type="email" id="email" class="auth-input" placeholder="example@email.com">
+        </div>
+
+        <div class="auth-input-group">
+            <label>Mật khẩu *</label>
+            <input type="password" id="password" class="auth-input" placeholder="Tối thiểu 8 ký tự">
+        </div>
+
+        <div class="auth-input-group">
+            <label>Xác nhận mật khẩu *</label>
+            <input type="password" id="repassword" class="auth-input" placeholder="Nhập lại mật khẩu">
+        </div>
+
+        <div class="auth-checkbox">
+            <input type="checkbox" id="terms">
+            <label for="terms">Tôi đồng ý với các <b>Điều khoản & Điều kiện</b> và <b>Chính sách Bảo mật</b> của
+                Adidas.</label>
+        </div>
+
+        <button class="auth-btn" id="regBtn" onclick="handleRegister()">
+            Đăng ký ngay
+            <i class="ti-user"></i>
+        </button>
+
+        <div class="auth-links">
+            Đã có tài khoản? <a href="login.html">Đăng nhập ngay</a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./assets/style/auth.js"></script>
+    <script>
+        function handleRegister() {
+            const username = document.getElementById('username').value.trim();
+            const fullname = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const pass = document.getElementById('password').value;
+            const repass = document.getElementById('repassword').value;
+            const terms = document.getElementById('terms').checked;
+
+            const error = document.getElementById('errorMsg');
+            const success = document.getElementById('successMsg');
+            const btn = document.getElementById('regBtn');
+
+            error.style.display = 'none';
+            success.style.display = 'none';
+
+            // Validation
+            if (!username || !fullname || !email || !pass || !repass) {
+                error.style.display = 'block';
+                error.textContent = 'Vui lòng điền đầy đủ tất cả các trường bắt buộc!';
+                return;
+            }
+
+            if (pass.length < 8) {
+                error.style.display = 'block';
+                error.textContent = 'Mật khẩu phải có ít nhất 8 ký tự!';
+                return;
+            }
+
+            if (pass !== repass) {
+                error.style.display = 'block';
+                error.textContent = 'Mật khẩu xác nhận không khớp!';
+                return;
+            }
+
+            if (!terms) {
+                error.style.display = 'block';
+                error.textContent = 'Bạn phải đồng ý với các điều khoản để tiếp tục!';
+                return;
+            }
+
+            // Set loading state
+            btn.innerHTML = 'Đang xử lý... <i class="ti-reload-loop"></i>';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                const result = UserDB.register({
+                    username,
+                    fullname,
+                    email,
+                    password: pass
+                });
+
+                if (result.success) {
+                    success.style.display = 'block';
+                    success.textContent = 'Đăng ký thành công! Đang chuyển tới trang đăng nhập...';
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    error.style.display = 'block';
+                    error.textContent = result.message;
+                    btn.innerHTML = 'Đăng ký ngay <i class="ti-user"></i>';
+                    btn.disabled = false;
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>
